@@ -12,7 +12,7 @@
     "email": "mafredri+adm@gmail.com",
     "website": "http://deluge-torrent.org",
     "architecture": "ADM_ARCH",
-    "firmware": "2.2"
+    "firmware": "2.2.0"
   },
   "adm-desktop": {
     "app": {
