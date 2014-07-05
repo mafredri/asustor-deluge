@@ -1,0 +1,31 @@
+Deluge is a full-featured ​BitTorrent client for Linux, OS X, Unix and Windows. It has been designed using the client server model with a daemon process that handles all the bittorrent activity. The Deluge daemon is able to run on headless machines with the user-interfaces being able to connect remotely from any platform.
+
+Login password: deluge
+Login for remote clients: admin/admin
+
+The default login password can be changed through the web-interface. You can also connect remotely to the deluge daemon with the Deluge-client by enabling classic-mode in settings.
+
+Deluge is ​Free Software and is licensed under the ​GNU General Public License.
+
+Features:
+
+    * Core/UI split allowing Deluge to run as a daemon
+    * Connect remotely to the Deluge daemon
+    * Web UI
+    * Console UI
+    * GTK+ UI
+    * BitTorrent Protocol Encryption
+    * Mainline DHT
+    * Local Peer Discovery (aka LSD)
+    * FAST protocol extension
+    * µTorrent Peer Exchange
+    * UPnP and NAT-PMP
+    * Proxy support
+    * Web seed
+    * Private Torrents
+    * Global and per-torrent speed limits
+    * Configurable bandwidth scheduler
+    * Password protection
+    * RSS (via Plugin)
+    * Other ​libtorrent features
+    * And much more!
