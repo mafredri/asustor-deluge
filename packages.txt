@@ -6,7 +6,7 @@ dev-python/six*
 dev-python/pyxdg*
 dev-python/setproctitle*
 dev-libs/boost*
-net-libs/rb_libtorrent*
+net-libs/rb_libtorrent-0.*
 dev-python/chardet*
 net-zope/zope-interface*
 dev-python/pycparser*
@@ -20,6 +20,6 @@ dev-python/cryptography*
 dev-python/pyopenssl*
 dev-python/twisted-core*
 dev-python/twisted-web*
-net-p2p/deluge*
+net-p2p/deluge-1.3.9999*
 app-arch/unrar*
 app-arch/p7zip*
