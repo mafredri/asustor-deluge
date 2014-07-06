@@ -21,3 +21,5 @@ dev-python/pyopenssl*
 dev-python/twisted-core*
 dev-python/twisted-web*
 net-p2p/deluge*
+app-arch/unrar*
+app-arch/p7zip*
