@@ -4,6 +4,11 @@
 
 Generate Deluge app for ASUSTOR ADM. This assumes Gentoo as the cross-compilation distro.
 
+## Main software and versions included
+
+* Deluge 1.3.6+ (1.3-stable branch)
+* libtorrent (rasterbar) 0.16.16
+
 ## Requirements
 
 * Gentoo set up to cross-compile for ADM
