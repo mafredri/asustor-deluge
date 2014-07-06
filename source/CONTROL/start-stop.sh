@@ -13,6 +13,9 @@ DELUGEUI_OPTS="-u web"
 DELUGED_USER_HOME=$(getent passwd "${DELUGED_USER}" | cut -d ':' -f 6)
 export HOME=$DELUGED_USER_HOME
 
+# Change working directory as deluge will see this as the home directory
+cd $HOME
+
 start() {
 	echo "Starting Deluged"
 	start-stop-daemon --start --background --pidfile /var/run/deluged.pid --make-pidfile \

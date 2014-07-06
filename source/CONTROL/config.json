@@ -3,9 +3,7 @@
     "package": "deluge",
     "name": "Deluge",
     "version": "APKG_VERSION",
-    "depends": [
-      "python"
-    ],
+    "depends": [],
     "conflicts": [],
     "developer": "Deluge Team",
     "maintainer": "mafredri",

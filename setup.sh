@@ -14,6 +14,12 @@ ADM_ARCH=(
 # Set hostname (ssh) from where to fetch the files
 HOST=asustorx
 
+# We are only interested in files from these directories
+KEEP_FILES="
+usr/bin
+usr/lib*
+"
+
 cd $ROOT
 
 if [[ ! -d dist ]]; then
@@ -29,34 +35,47 @@ for arch in ${ADM_ARCH[@]}; do
 
     echo "Building ${arch} from ${HOST}:${cross}"
 
-    # Run script on remote host which gathers all files in a temp-directory and echoes the path
-    FILES=$(ssh $HOST PREFIX=${cross} 'bash -s' < scripts/extract_files.sh)
-    if [[ $? -eq 1 ]]; then
-        echo $FILES
-        echo "Failed to extract files, skipping..."
-        continue
-    fi
-
     # Create temp directory and copy the APKG template
-    TMP_DIR=$(mktemp -d /tmp/$PACKAGE.XXXXXX)
+    PKG_DIR=$(mktemp -d /tmp/${PACKAGE}_PACKAGES.XXXXXX)
+    echo "Rsyncing packages..."
+    rsync -ra --include-from=packages.txt --exclude="*/*" $HOST:$cross/packages/* $PKG_DIR
+
+    TMP_DIR=$(mktemp -d /tmp/${PACKAGE}.XXXXXX)
     chmod 0755 $TMP_DIR
+
+    echo "Unpacking files..."
+    (cd $PKG_DIR; for pkg in $PKG_DIR/*/*.tbz2; do tar xjf $pkg; done)
+
+    echo "Copying required files..."
+    for file in $KEEP_FILES; do
+        cp -af $PKG_DIR/$file $TMP_DIR
+    done
+
+    echo "Cleaning up package tmp..."
+    rm -rf $PKG_DIR
+
+    echo "Copying apkg skeleton..."
     cp -rf source/* $TMP_DIR
 
-    # Set the ARCH and VERSION
+    echo "Finalizing..."
+    echo "Setting version to ${VERSION}"
     sed -i '' -e "s^ADM_ARCH^${arch}^" -e "s^APKG_VERSION^${VERSION}^" $TMP_DIR/CONTROL/config.json
 
-    # Copy files from the host machine
-    rsync -ra $HOST:$FILES/* $TMP_DIR
+    echo "Updating shebangs..."
+    for exec in $TMP_DIR/bin/*; do
+        grep "#\!/usr" $exec | grep "#\!/usr/local/AppCentral" > /dev/null
+        if [ $? -eq 1 ]; then
+            vim -es -c '1 s^#!/usr^#!/usr/local/AppCentral/deluge^' -c wq $exec
+        fi
+    done
 
-    # Update Deluge scripts to use correct python
-    sed -i '' -e 's^#!/usr/bin/python2.7^#!/usr/local/AppCentral/deluge/bin/python2.7^' $TMP_DIR/bin/*
-
+    echo "Building APK..."
     # APKs require root privileges, make sure priviliges are correct
     sudo chown -R 0:0 $TMP_DIR
     sudo scripts/apkg-tools.py create $TMP_DIR --destination dist/
     sudo chown -R $(whoami) dist
 
-    echo "Done with building APK"
+    echo "Done!"
 
     echo "Cleaning up..."
     sudo rm -rf $TMP_DIR
