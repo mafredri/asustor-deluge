@@ -1,12 +1,12 @@
 #!/bin/sh
 
+APKG_PKG_DIR=/usr/local/AppCentral/deluge
+
 case "$APKG_PKG_STATUS" in
 	install)
-        # If previous configurations don't exist, copy the initial template
-        DELUGED_USER="admin"
-        DELUGED_USER_HOME=$(getent passwd "${DELUGED_USER}" | cut -d ':' -f 6)
-        DELUGED_CONF=$DELUGED_USER_HOME/.config/deluge
+        source $APKG_PKG_DIR/CONTROL/env.sh
 
+        # If previous configurations don't exist, copy the initial template
         if [ ! -d $DELUGED_CONF ]; then
             mkdir -p $DELUGED_CONF
             cp $APKG_PKG_DIR/config/* $DELUGED_CONF/
@@ -14,7 +14,6 @@ case "$APKG_PKG_STATUS" in
         fi
 		;;
 	upgrade)
-        #setup
 		;;
 	*)
 		;;

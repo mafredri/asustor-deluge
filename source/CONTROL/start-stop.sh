@@ -1,32 +1,23 @@
-#!/bin/sh
+#!/bin/sh -e
 
 APKG_PKG_DIR=/usr/local/AppCentral/deluge
 
-DELUGED=$APKG_PKG_DIR/bin/deluged
-DELUGE=$APKG_PKG_DIR/bin/deluge
-
-DELUGED_USER="admin"
-DELUGED_OPTS=""
-DELUGEUI_START="true"
-DELUGEUI_OPTS="-u web"
-
-DELUGED_USER_HOME=$(getent passwd "${DELUGED_USER}" | cut -d ':' -f 6)
-export HOME=$DELUGED_USER_HOME
-
-# Change working directory as deluge will see this as the home directory
-cd $HOME
+source $APKG_PKG_DIR/CONTROL/env.sh
 
 start() {
 	echo "Starting Deluged"
-	start-stop-daemon --start --background --pidfile /var/run/deluged.pid --make-pidfile \
-	--chuid "${DELUGED_USER}" --user "${DELUGED_USER}" \
-	--exec $DELUGED -- --do-not-daemonize $DELUGED_OPTS
+	(cd $HOME;
+		start-stop-daemon --start --background --pidfile /var/run/deluged.pid --make-pidfile \
+		--chuid "${DELUGED_USER}" --user "${DELUGED_USER}" --exec $APKG_PKG_DIR/bin/deluged -- \
+		--do-not-daemonize $DELUGED_OPTS)
 
 
 	if [ "${DELUGEUI_START}" = "true" ] ; then
 		echo "Starting Deluge"
-		start-stop-daemon --start --background --pidfile /var/run/deluge.pid --make-pidfile \
-		--exec $DELUGE --chuid "${DELUGED_USER}" --user "${DELUGED_USER}" -- $DELUGEUI_OPTS
+		(cd $HOME;
+			start-stop-daemon --start --background --pidfile /var/run/deluge.pid --make-pidfile \
+			--exec $APKG_PKG_DIR/bin/deluge --chuid "${DELUGED_USER}" --user "${DELUGED_USER}" -- \
+			$DELUGEUI_OPTS)
 	fi
 }
 
