@@ -4,6 +4,9 @@
 #
 # Requirements: twisted pyopenssl pyxdg chardet setproctitle mako service_identity
 
+echo "This file is deprecated..."
+exit 1
+
 if [[ "${PREFIX}" == "" ]]; then
     echo "The PREFIX variable must be set!"
     exit 1
