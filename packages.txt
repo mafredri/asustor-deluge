@@ -1,12 +1,12 @@
 dev-libs/geoip*
-dev-lang/python-2.7*
+dev-lang/python-2.7.7*
 dev-lang/python-exec*
 dev-python/setuptools*
 dev-python/six*
 dev-python/pyxdg*
 dev-python/setproctitle*
 dev-libs/boost*
-net-libs/rb_libtorrent-0.*
+net-libs/rb_libtorrent-0.16*
 dev-python/chardet*
 net-zope/zope-interface*
 dev-python/pycparser*

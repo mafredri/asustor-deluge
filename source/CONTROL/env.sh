@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DELUGE_PATH=/usr/local/AppCentral/deluge
+PKG_PATH=/usr/local/AppCentral/deluge
 
 DELUGED_USER="admin"
 DELUGED_OPTS=""
@@ -9,6 +9,7 @@ DELUGED_CONF=$DELUGED_USER_HOME/.config/deluge
 DELUGEUI_START="true"
 DELUGEUI_OPTS="-u web"
 
-export PATH=$DELUGE_PATH/bin:$PATH
-export LD_LIBRARY_PATH=$DELUGE_PATH/lib64:$DELUGE_PATH/lib:$LD_LIBRARY_PATH
+export PATH=$PKG_PATH/bin:$PATH
+export LD_LIBRARY_PATH=$PKG_PATH/lib64:$PKG_PATH/lib:$LD_LIBRARY_PATH
 export HOME=$DELUGED_USER_HOME
+#export PYTHONPATH=$PKG_PATH/lib64/python2.7/site-packages:$PKG_PATH/lib/python2.7/site-packages
