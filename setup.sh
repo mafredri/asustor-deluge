@@ -3,20 +3,20 @@
 FETCH_PACKAGES=0
 
 show_help() {
-   echo "Options:
--f  Fetch packages instead of using local ones
--h  This help"
-   exit 0
+    echo "Options:
+  -f    Fetch packages instead of using local ones
+  -h    This help"
+    exit 0
 }
 
 while getopts :fh opts; do
    case $opts in
-      f)
-         FETCH_PACKAGES=1
-         ;;
-      h)
-         show_help
-         ;;
+        f)
+            FETCH_PACKAGES=1
+            ;;
+        h)
+            show_help
+            ;;
    esac
 done
 
