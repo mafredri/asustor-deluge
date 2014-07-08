@@ -10,6 +10,5 @@ DELUGEUI_START="true"
 DELUGEUI_OPTS="-u web"
 
 export PATH=$PKG_PATH/bin:$PATH
-export LD_LIBRARY_PATH=$PKG_PATH/lib64:$PKG_PATH/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$PKG_PATH/lib:$LD_LIBRARY_PATH
 export HOME=$DELUGED_USER_HOME
-#export PYTHONPATH=$PKG_PATH/lib64/python2.7/site-packages:$PKG_PATH/lib/python2.7/site-packages
