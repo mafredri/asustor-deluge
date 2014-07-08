@@ -64,6 +64,8 @@ for arch in ${ADM_ARCH[@]}; do
     if [ $FETCH_PACKAGES -eq 1 ]; then
         echo "Rsyncing packages..."
         rsync -ram --include-from=packages.txt --exclude="*/*" --exclude="Packages" $HOST:$cross/packages/* $PKG_DIR
+        PKG_INSTALLED=$(cd $PKG_DIR; ls -1 */*.tbz2 | sort)
+        echo -e "# This file is auto-generated.\n${PKG_INSTALLED//.tbz2/}" > pkgversions_$arch.txt
     else
         echo "Using cached packages..."
     fi
@@ -73,7 +75,8 @@ for arch in ${ADM_ARCH[@]}; do
         mkdir -p $WORK_DIR
     fi
     echo "Cleaning out ${WORK_DIR}..."
-    rm -rf $WORK_DIR/*
+    rm -rf $WORK_DIR
+    mkdir $WORK_DIR
     chmod 0755 $WORK_DIR
 
     echo "Unpacking files..."
