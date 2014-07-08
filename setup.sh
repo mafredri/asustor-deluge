@@ -1,18 +1,23 @@
 #!/bin/bash
 
 FETCH_PACKAGES=0
+GEOIP_OPTS=""
 
 show_help() {
     echo "Options:
   -f    Fetch packages instead of using local ones
+  -g    Force GeoIP database update
   -h    This help"
     exit 0
 }
 
-while getopts :fh opts; do
+while getopts :fgh opts; do
    case $opts in
         f)
             FETCH_PACKAGES=1
+            ;;
+        g)
+            GEOIP_OPTS="--force"
             ;;
         h)
             show_help
@@ -48,7 +53,7 @@ if [[ ! -d dist ]]; then
 fi
 
 # Fetch GeoIP database
-scripts/geoipupdate.sh
+scripts/geoipupdate.sh $GEOIP_OPTS
 
 for arch in ${ADM_ARCH[@]}; do
     cross=${arch#*:}
@@ -63,7 +68,7 @@ for arch in ${ADM_ARCH[@]}; do
     fi
     if [ $FETCH_PACKAGES -eq 1 ]; then
         echo "Rsyncing packages..."
-        rsync -ram --include-from=packages.txt --exclude="*/*" --exclude="Packages" $HOST:$cross/packages/* $PKG_DIR
+        rsync -ram --delete --include-from=packages.txt --exclude="*/*" --exclude="Packages" $HOST:$cross/packages/* $PKG_DIR
         PKG_INSTALLED=$(cd $PKG_DIR; ls -1 */*.tbz2 | sort)
         echo -e "# This file is auto-generated.\n${PKG_INSTALLED//.tbz2/}" > pkgversions_$arch.txt
     else
@@ -83,7 +88,7 @@ for arch in ${ADM_ARCH[@]}; do
     TMP_DIR=$(mktemp -d /tmp/$PACKAGE.XXXXXX)
     (cd $TMP_DIR; for pkg in $ROOT/$PKG_DIR/*/*.tbz2; do tar xjf $pkg; done)
 
-    echo "Copying required files..."
+    echo "Grabbing required files..."
     for file in $KEEP_FILES; do
         mv $TMP_DIR/$file $WORK_DIR
     done

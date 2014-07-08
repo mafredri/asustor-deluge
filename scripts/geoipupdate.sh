@@ -18,6 +18,10 @@ DATABASES="
     GeoLiteCountry/GeoIP
 "
 
+if [ "${1}" = -f ] || [ "${1}" = --force ]; then
+        force=true
+fi
+
 if [ ! -d "${GEOIPDIR}" ]; then
     mkdir "${GEOIPDIR}"
 fi
@@ -31,18 +35,15 @@ if [ -n "${DATABASES}" ]; then
     for db in $DATABASES; do
         fname=$(basename $db)
 
-        if [ -f "${fname}.dat" ]; then
-            echo "${fname}.dat exists, skipping..."
-            continue
-        fi
-
-        wget --no-verbose -t 3 -T 60 \
-            "${GEOIP_MIRROR}/${db}.dat.gz" \
-            -O "${TMPDIR}/${fname}.dat.gz"
-        if [ $? -eq 0 ]; then
-            gunzip -fdc "${TMPDIR}/${fname}.dat.gz" > "${TMPDIR}/${fname}.dat"
-            mv "${TMPDIR}/${fname}.dat" "${fname}.dat"
-            chmod 0644 "${fname}.dat"
+        if [ ! -f "${fname}.dat" ] || [ ${force} ]; then
+            wget --no-verbose -t 3 -T 60 \
+                "${GEOIP_MIRROR}/${db}.dat.gz" \
+                -O "${TMPDIR}/${fname}.dat.gz"
+            if [ $? -eq 0 ]; then
+                gunzip -fdc "${TMPDIR}/${fname}.dat.gz" > "${TMPDIR}/${fname}.dat"
+                mv "${TMPDIR}/${fname}.dat" "${fname}.dat"
+                chmod 0644 "${fname}.dat"
+            fi
         fi
     done
     [ -d "${TMPDIR}" ] && rm -rf $TMPDIR
