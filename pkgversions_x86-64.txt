@@ -22,5 +22,5 @@ dev-python/six-1.7.3
 dev-python/twisted-core-14.0.0
 dev-python/twisted-web-14.0.0
 net-libs/rb_libtorrent-0.16.16
-net-p2p/deluge-1.3.9999
+net-p2p/deluge-1.3.7
 net-zope/zope-interface-4.1.1
