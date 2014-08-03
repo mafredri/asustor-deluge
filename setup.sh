@@ -40,12 +40,6 @@ ADM_ARCH=(
 # Set hostname (ssh) from where to fetch the files
 HOST=asustorx
 
-# We are only interested in files from these directories
-KEEP_FILES="
-usr/bin
-usr/lib*
-"
-
 cd $ROOT
 
 if [[ ! -d dist ]]; then
@@ -84,38 +78,29 @@ for arch in ${ADM_ARCH[@]}; do
     mkdir $WORK_DIR
     chmod 0755 $WORK_DIR
 
+    echo "Copying apkg skeleton..."
+    cp -af source/* $WORK_DIR
+
     echo "Unpacking files..."
     TMP_DIR=$(mktemp -d /tmp/$PACKAGE.XXXXXX)
     (cd $TMP_DIR; for pkg in $ROOT/$PKG_DIR/*/*.tbz2; do tar xjf $pkg; done)
 
     echo "Grabbing required files..."
-    for file in $KEEP_FILES; do
-        mv $TMP_DIR/$file $WORK_DIR
-    done
+    mv $TMP_DIR/usr/lib*/libboost_system* $WORK_DIR/lib
+    mv $TMP_DIR/usr/lib*/libboost_python-2.7* $WORK_DIR/lib
+    mv $TMP_DIR/usr/lib*/libtorrent-rasterbar* $WORK_DIR/lib
+    mv $TMP_DIR/usr/lib*/libGeoIP* $WORK_DIR/lib
+    mv $TMP_DIR/usr/lib*/libunrar* $WORK_DIR/lib
+    mv $TMP_DIR/usr/lib*/p7zip $WORK_DIR/lib
+    mv $TMP_DIR/usr/lib*/python2.7/site-packages/* $WORK_DIR/lib/python2.7/site-packages
+    # Temporary until ASUSTOR includes these in the Python app
+    mv $TMP_DIR/usr/lib*/libpython2.7.so* $WORK_DIR/lib
 
     rm -rf $TMP_DIR
-
-    # Merge lib and lib64
-    if [ -d $WORK_DIR/lib64 ]; then
-        mv $WORK_DIR/lib64/* $WORK_DIR/lib/
-        rmdir $WORK_DIR/lib64
-        (cd $WORK_DIR; ln -sf lib lib64)
-    fi
-
-    echo "Copying apkg skeleton..."
-    cp -rf source/* $WORK_DIR
 
     echo "Finalizing..."
     echo "Setting version to ${VERSION}"
     sed -i '' -e "s^ADM_ARCH^${arch}^" -e "s^APKG_VERSION^${VERSION}^" $WORK_DIR/CONTROL/config.json
-
-    echo "Updating shebangs..."
-    for exec in $WORK_DIR/bin/*; do
-        grep "#\!/usr" $exec | grep "#\!/usr/local/AppCentral" > /dev/null
-        if [ $? -eq 1 ]; then
-            vim -es -c '1 s^#!/usr^#!/usr/local/AppCentral/deluge^' -c wq $exec
-        fi
-    done
 
     echo "Building APK..."
     # APKs require root privileges, make sure priviliges are correct
