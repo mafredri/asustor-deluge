@@ -1,7 +1,5 @@
 dev-libs/geoip*
 dev-lang/python-2.7*
-dev-lang/python-exec*
-dev-python/setuptools*
 dev-python/six*
 dev-python/pyxdg*
 dev-python/setproctitle*
@@ -15,12 +13,12 @@ dev-python/mako*
 dev-python/cffi*
 dev-python/pyasn1*
 dev-python/pyasn1-modules*
+dev-python/characteristic*
 dev-python/service-identity*
 dev-python/cryptography*
 dev-python/pyopenssl*
 dev-python/twisted-core*
 dev-python/twisted-web*
-# net-p2p/deluge-1.3.9999*
 net-p2p/deluge-1.3.7*
 app-arch/unrar*
 app-arch/p7zip*
