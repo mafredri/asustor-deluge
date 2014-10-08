@@ -6,8 +6,8 @@ Generate Deluge app for ASUSTOR ADM. This assumes Gentoo as the cross-compilatio
 
 ## Main software and versions included
 
-* Deluge 1.3.7 (`1.3-stable` branch)
-* libtorrent (rasterbar) 0.16.16
+* Deluge 1.3.9
+* libtorrent (rasterbar) 0.16.17
 
 ## Requirements to build this apkg
 
@@ -15,7 +15,7 @@ Generate Deluge app for ASUSTOR ADM. This assumes Gentoo as the cross-compilatio
 
 ## Todo
 
-* Improve the start-stop script, should be able to "fail"
+* ~~Improve the start-stop script, should be able to "fail"~~
 * Allow build script to remotely upgrade packages
 
 ## Links
