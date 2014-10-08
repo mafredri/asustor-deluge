@@ -6,6 +6,9 @@ else
     PKG_DIR=$APKG_PKG_DIR
 fi
 
+# Source env variables
+source ${PKG_DIR}/CONTROL/env.sh
+
 setup_virtualenv() {
     (cd ${PKG_DIR};
         mv lib/python2.7/site-packages ./
@@ -20,18 +23,18 @@ case "${APKG_PKG_STATUS}" in
 	install)
         setup_virtualenv
 
-        # Source env variables
-        source ${PKG_DIR}/CONTROL/env.sh
-
         # If previous configurations don't exist, copy the initial template
         if [ ! -d ${DELUGED_CONF} ]; then
             mkdir -p ${DELUGED_CONF}
             cp ${PKG_DIR}/config/* ${DELUGED_CONF}/
-            chown -R ${DELUGED_USER} ${DELUGED_CONF}
+            chown -R ${DELUGED_USER} "${DELUGED_CONF}/../"
         fi
 		;;
 	upgrade)
         setup_virtualenv
+
+        # Make sure the parent config directory has the correct permissions
+        chown -R ${DELUGED_USER} "${DELUGED_CONF}/../"
 		;;
 	*)
 		;;

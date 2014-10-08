@@ -28,6 +28,9 @@ USER=${DELUGED_USER%:*}
 CHUID=${DELUGED_USER}
 
 start_daemon() {
+    # Set umask to create files with world r/w
+    umask 0
+
 	start-stop-daemon -S --quiet --pidfile ${DELUGED_PID} --chuid "${CHUID}" --user ${USER} --exec ${DELUGED} -- \
 		--quiet --pidfile ${DELUGED_PID} ${DELUGED_OPTS}
 
