@@ -14,7 +14,7 @@ dev-python/cffi*
 dev-python/pyasn1*
 dev-python/pyasn1-modules*
 dev-python/characteristic*
-dev-python/service-identity*
+dev-python/service_identity*
 dev-python/cryptography*
 dev-python/pyopenssl*
 dev-python/twisted-core*
