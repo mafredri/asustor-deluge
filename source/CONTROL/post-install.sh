@@ -33,6 +33,14 @@ case "${APKG_PKG_STATUS}" in
 	upgrade)
         setup_virtualenv
 
+        # Restore previous Deluge configuration if it exists
+        if [[ -d ${APKG_TEMP_DIR}/config ]]; then
+            if [[ ! -d ${DELUGED_CONF} ]]; then
+                mkdir ${DELUGED_CONF}
+            fi
+            cp -af ${APKG_TEMP_DIR}/config/* ${DELUGED_CONF}/
+        fi
+
         # Make sure the parent config directory has the correct permissions
         chown -R ${DELUGED_USER} "${DELUGED_CONF}/../"
 		;;
