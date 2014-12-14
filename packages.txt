@@ -6,7 +6,7 @@ dev-python/setproctitle*
 dev-libs/boost*
 net-libs/rb_libtorrent-0.16*
 dev-python/chardet*
-net-zope/zope-interface*
+dev-python/zope-interface*
 dev-python/pycparser*
 dev-python/markupsafe*
 dev-python/mako*
