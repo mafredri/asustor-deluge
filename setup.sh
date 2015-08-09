@@ -87,14 +87,14 @@ for arch in ${ADM_ARCH[@]}; do
 
     echo "Grabbing required files..."
     mv $TMP_DIR/usr/bin/unrar $WORK_DIR/bin
-    mv $TMP_DIR/usr/bin/7z* $WORK_DIR/bin
+    mv $TMP_DIR/usr/lib*/p7zip/* $WORK_DIR/bin
     mv $TMP_DIR/usr/bin/p7zip $WORK_DIR/bin
     mv $TMP_DIR/usr/lib*/libboost_system* $WORK_DIR/lib
     mv $TMP_DIR/usr/lib*/libboost_python-2.7* $WORK_DIR/lib
     mv $TMP_DIR/usr/lib*/libtorrent-rasterbar* $WORK_DIR/lib
     mv $TMP_DIR/usr/lib*/libGeoIP* $WORK_DIR/lib
     mv $TMP_DIR/usr/lib*/libunrar* $WORK_DIR/lib
-    mv $TMP_DIR/usr/lib*/p7zip $WORK_DIR/lib
+    # mv $TMP_DIR/usr/lib*/p7zip $WORK_DIR/lib
     mv $TMP_DIR/usr/lib*/python2.7/site-packages/* $WORK_DIR/lib/python2.7/site-packages
     # Temporary until ASUSTOR includes these in the Python app
     mv $TMP_DIR/usr/lib*/libpython2.7.so* $WORK_DIR/lib
