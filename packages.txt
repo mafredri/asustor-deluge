@@ -4,7 +4,7 @@ dev-python/six*
 dev-python/pyxdg*
 dev-python/setproctitle*
 dev-libs/boost*
-net-libs/rb_libtorrent-0.16*
+net-libs/rb_libtorrent-*
 dev-python/chardet*
 dev-python/zope-interface*
 dev-python/pycparser*
