@@ -44,7 +44,7 @@ stop_daemon() {
 
 	wait_for_status 1 20
 
-	if [$? -eq 1 ]; then
+	if [ $? -eq 1 ]; then
 		echo "Taking too long, killing service..."
 		start-stop-daemon -K --signal 9 --quiet --user ${USER} --pidfile ${DELUGED_PID}
 		start-stop-daemon -K --signal 9 --quiet --user ${USER} --pidfile ${DELUGE_WEB_PID}
@@ -64,7 +64,7 @@ wait_for_status() {
     while [ ${counter} -gt 0 ]; do
         daemon_status
         [ $? -eq $1 ] && return
-        let counter=counter-1
+        counter=$(( counter - 1 ))
         sleep 1
     done
     return 1
