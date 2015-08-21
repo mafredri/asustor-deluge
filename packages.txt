@@ -1,5 +1,4 @@
 dev-libs/geoip*
-dev-lang/python-2.7*
 dev-python/six*
 dev-python/pyxdg*
 dev-python/setproctitle*
