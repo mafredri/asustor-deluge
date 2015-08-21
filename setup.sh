@@ -97,7 +97,7 @@ for arch in ${ADM_ARCH[@]}; do
     # mv $TMP_DIR/usr/lib*/p7zip $WORK_DIR/lib
     mv $TMP_DIR/usr/lib*/python2.7/site-packages/* $WORK_DIR/lib/python2.7/site-packages
     # Temporary until ASUSTOR includes these in the Python app
-    mv $TMP_DIR/usr/lib*/libpython2.7.so* $WORK_DIR/lib
+    # mv $TMP_DIR/usr/lib*/libpython2.7.so* $WORK_DIR/lib
 
     rm -rf $TMP_DIR
 
