@@ -1,13 +1,13 @@
 # This file is auto-generated.
 app-arch/p7zip-9.38.1-r2
-app-arch/unrar-5.2.7
+app-arch/unrar-5.3.3
 dev-libs/boost-1.57.0
 dev-libs/geoip-1.6.6
-dev-python/cffi-1.1.2
+dev-python/cffi-1.2.1
 dev-python/characteristic-14.3.0
 dev-python/chardet-2.3.0
-dev-python/cryptography-0.9.3
-dev-python/mako-1.0.0
+dev-python/cryptography-1.0.1
+dev-python/mako-1.0.2
 dev-python/markupsafe-0.23
 dev-python/pyasn1-0.1.8
 dev-python/pyasn1-modules-0.0.7
@@ -15,7 +15,7 @@ dev-python/pycparser-2.14
 dev-python/pyopenssl-0.15.1
 dev-python/pyxdg-0.25-r1
 dev-python/service_identity-14.0.0
-dev-python/setproctitle-1.1.8
+dev-python/setproctitle-1.1.9
 dev-python/six-1.9.0-r1
 dev-python/twisted-core-15.2.1
 dev-python/twisted-web-15.2.1
