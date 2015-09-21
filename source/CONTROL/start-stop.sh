@@ -29,8 +29,8 @@ USER=${DELUGED_USER%:*}
 CHUID=${DELUGED_USER}
 
 start_daemon() {
-    # Set umask to create files with world r/w
-    umask 0
+	# Set umask to create files with world r/w
+	umask 0
 
 	start-stop-daemon -S --quiet --pidfile "${DELUGED_PID}" --chuid "${CHUID}" \
 		--user "${USER}" --exec "${DELUGED}" -- \
@@ -63,42 +63,42 @@ daemon_status() {
 	start-stop-daemon -K --quiet --test  --user "${USER}" --pidfile "${DELUGE_WEB_PID}"
 	ret2=$?
 
-    if [ $ret1 -eq 0 ] || [ $ret2 -eq 0 ]; then
-    	return 0
-    fi
+	if [ $ret1 -eq 0 ] || [ $ret2 -eq 0 ]; then
+		return 0
+	fi
 
-    return 1
+	return 1
 }
 
 wait_for_status() {
-    counter=$2
-    while [ "${counter}" -gt 0 ]; do
-        if ! daemon_status; then
-        	return 0
-        fi
-        counter=$(( counter - 1 ))
-        sleep 1
-    done
-    return 1
+	counter=$2
+	while [ "${counter}" -gt 0 ]; do
+		if ! daemon_status; then
+			return 0
+		fi
+		counter=$(( counter - 1 ))
+		sleep 1
+	done
+	return 1
 }
 
 case $1 in
 	start)
 		if ! daemon_status; then
-            echo "Starting ${NAME}..."
-            start_daemon
-        else
-            echo "${NAME} is already running"
-        fi
+			echo "Starting ${NAME}..."
+			start_daemon
+		else
+			echo "${NAME} is already running"
+		fi
 		;;
 
 	stop)
 		if daemon_status; then
-            echo "Stopping ${NAME}..."
-            stop_daemon
-        else
-            echo "${NAME} is not running"
-        fi
+			echo "Stopping ${NAME}..."
+			stop_daemon
+		else
+			echo "${NAME} is not running"
+		fi
 		;;
 	restart)
 		if daemon_status; then
@@ -110,11 +110,11 @@ case $1 in
 		;;
 	status)
 		if daemon_status; then
-		    echo "${NAME} is running"
-		    exit 0
+			echo "${NAME} is running"
+			exit 0
 		else
-		    echo "${NAME} is not running"
-		    exit 1
+			echo "${NAME} is not running"
+			exit 1
 		fi
 		;;
 	*)
