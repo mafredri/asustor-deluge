@@ -34,13 +34,13 @@ start_daemon() {
 
 	start-stop-daemon -S --quiet --pidfile "${DELUGED_PID}" --chuid "${CHUID}" \
 		--user "${USER}" --exec "${DELUGED}" -- \
-		--quiet --pidfile "${DELUGED_PID}" --config "${DELUGED_CONF}" \
+		--pidfile "${DELUGED_PID}" --config "${DELUGED_CONF}" \
 		--logfile "${DELUGED_LOG}" --loglevel "${DELUGED_LOGLEVEL}"
 
 	start-stop-daemon -S --quiet --background --pidfile "${DELUGE_WEB_PID}" \
 		--make-pidfile --chuid "${CHUID}" --user "${USER}" \
 		--exec "${DELUGE_WEB}" -- \
-		--quiet --config "${DELUGED_CONF}" --logfile "${DELUGE_WEB_LOG}" \
+		--config "${DELUGED_CONF}" --logfile "${DELUGE_WEB_LOG}" \
 		--loglevel "${DELUGE_WEB_LOGLEVEL}"
 }
 
