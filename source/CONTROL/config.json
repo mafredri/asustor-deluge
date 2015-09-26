@@ -10,7 +10,7 @@
     "email": "mafredri+adm@gmail.com",
     "website": "http://deluge-torrent.org",
     "architecture": "ADM_ARCH",
-    "firmware": "2.2.0"
+    "firmware": "2.4.0"
   },
   "adm-desktop": {
     "app": {
@@ -26,8 +26,8 @@
   },
   "register": {
     "boot-priority": {
-      "stop-order": 80,
-      "start-order": 20
+      "start-order": 60,
+      "stop-order": 40
     },
     "port": [
       8112,
