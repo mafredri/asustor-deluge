@@ -1,5 +1,8 @@
 #!/bin/bash
 
+sudo echo -n
+
+BUMP_VERSION=0
 FETCH_PACKAGES=0
 GEOIP_OPTS=""
 
@@ -7,11 +10,12 @@ show_help() {
     echo "Options:
   -f    Fetch packages instead of using local ones
   -g    Force GeoIP database update
+  -b    Bump version
   -h    This help"
     exit 0
 }
 
-while getopts :fgh opts; do
+while getopts :fgbh opts; do
    case $opts in
         f)
             FETCH_PACKAGES=1
@@ -19,16 +23,32 @@ while getopts :fgh opts; do
         g)
             GEOIP_OPTS="--force"
             ;;
+        b)
+            BUMP_VERSION=1
+            ;;
         h)
             show_help
             ;;
    esac
 done
 
-
-ROOT=$(cd $(dirname "${0}") && pwd)
-PACKAGE=$(basename "${ROOT}")
 VERSION=$(<version.txt)
+if [ "$BUMP_VERSION" -eq 1 ]; then
+    echo "Bumping version..."
+    version_begin=${VERSION%.*}
+    version_part=${VERSION##*.}
+    if [ "$version_part" = "$VERSION" ]; then
+        version_part=0
+    else
+        version_part=$((version_part + 1))
+    fi
+    VERSION="${version_begin}.${version_part}"
+    echo "$VERSION" > version.txt
+    echo "New version $VERSION"
+fi
+
+ROOT=$(cd "$(dirname "${0}")" && pwd)
+PACKAGE=$(basename "${ROOT}")
 
 # This defines the arches available and from where to fetch the files
 # ARCH:PREFIX
