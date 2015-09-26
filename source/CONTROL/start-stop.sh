@@ -32,16 +32,13 @@ start_daemon() {
 	# Set umask to create files with world r/w
 	umask 0
 
-	start-stop-daemon -S --quiet --pidfile "${DELUGED_PID}" --chuid "${CHUID}" \
-		--user "${USER}" --exec "${DELUGED}" -- \
-		--pidfile "${DELUGED_PID}" --config "${DELUGED_CONF}" \
-		--logfile "${DELUGED_LOG}" --loglevel "${DELUGED_LOGLEVEL}"
+	start-stop-daemon -S --quiet --pidfile "${DELUGED_PID}" --chuid "${CHUID}" --user "${USER}" --exec "${DELUGED}" -- \
+		--pidfile="${DELUGED_PID}" --config="${DELUGED_CONF}" --logfile="${DELUGED_LOG}" \
+		--loglevel="${DELUGED_LOGLEVEL}"
 
-	start-stop-daemon -S --quiet --background --pidfile "${DELUGE_WEB_PID}" \
-		--make-pidfile --chuid "${CHUID}" --user "${USER}" \
-		--exec "${DELUGE_WEB}" -- \
-		--config "${DELUGED_CONF}" --logfile "${DELUGE_WEB_LOG}" \
-		--loglevel "${DELUGE_WEB_LOGLEVEL}"
+	start-stop-daemon -S --quiet --background --make-pidfile --pidfile "${DELUGE_WEB_PID}" --chuid "${CHUID}" \
+		--user "${USER}" --exec "${DELUGE_WEB}" -- \
+		--config="${DELUGED_CONF}" --logfile="${DELUGE_WEB_LOG}" --loglevel="${DELUGE_WEB_LOGLEVEL}"
 }
 
 stop_daemon() {
@@ -63,7 +60,7 @@ daemon_status() {
 	start-stop-daemon -K --quiet --test  --user "${USER}" --pidfile "${DELUGE_WEB_PID}"
 	ret2=$?
 
-	if [ $ret1 -eq 0 ] || [ $ret2 -eq 0 ]; then
+	if [ "$ret1" -eq 0 ] || [ "$ret2" -eq 0 ]; then
 		return 0
 	fi
 
@@ -72,8 +69,9 @@ daemon_status() {
 
 wait_for_status() {
 	counter=$2
-	while [ "${counter}" -gt 0 ]; do
-		if ! daemon_status; then
+	while [ "${counter}" -gt "$1" ]; do
+		daemon_status
+		if [ $? -eq 1 ]; then
 			return 0
 		fi
 		counter=$(( counter - 1 ))
@@ -84,7 +82,8 @@ wait_for_status() {
 
 case $1 in
 	start)
-		if ! daemon_status; then
+		daemon_status
+		if [ $? -eq 1 ]; then
 			echo "Starting ${NAME}..."
 			start_daemon
 		else
@@ -93,7 +92,8 @@ case $1 in
 		;;
 
 	stop)
-		if daemon_status; then
+		daemon_status
+		if [ $? -eq 0 ]; then
 			echo "Stopping ${NAME}..."
 			stop_daemon
 		else
@@ -101,7 +101,8 @@ case $1 in
 		fi
 		;;
 	restart)
-		if daemon_status; then
+		daemon_status
+		if [ $? -eq 0 ]; then
 			echo "Stopping ${NAME}..."
 			stop_daemon
 		fi
@@ -109,7 +110,8 @@ case $1 in
 		start_daemon
 		;;
 	status)
-		if daemon_status; then
+		daemon_status
+		if [ $? -eq 0 ]; then
 			echo "${NAME} is running"
 			exit 0
 		else
