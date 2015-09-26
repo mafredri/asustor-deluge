@@ -7,14 +7,14 @@ else
 fi
 
 # Source env variables
-source ${PKG_DIR}/CONTROL/env.sh
+. ${PKG_DIR}/CONTROL/env.sh
 
 case "${APKG_PKG_STATUS}" in
 	install)
 		;;
 	upgrade)
         # Back up Deluge configuration
-        if [[ -d ${DELUGED_CONF} ]]; then
+        if [ -d ${DELUGED_CONF} ]; then
             mkdir ${APKG_TEMP_DIR}/config
             cp -af ${DELUGED_CONF}/* ${APKG_TEMP_DIR}/config/
         fi

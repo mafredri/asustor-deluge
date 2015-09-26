@@ -7,7 +7,7 @@ else
 fi
 
 # Source env variables
-source ${PKG_DIR}/CONTROL/env.sh
+. ${PKG_DIR}/CONTROL/env.sh
 
 rm -rf ${DELUGED_CONF}
 

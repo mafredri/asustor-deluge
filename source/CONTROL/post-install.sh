@@ -7,14 +7,14 @@ else
 fi
 
 # Source env variables
-source ${PKG_DIR}/CONTROL/env.sh
+. ${PKG_DIR}/CONTROL/env.sh
 
 setup_virtualenv() {
     (cd ${PKG_DIR};
         mv lib/python2.7/site-packages ./
         virtualenv .
         mv site-packages/* lib/python2.7/site-packages && rmdir site-packages
-        source bin/activate
+        . bin/activate
         # Install deluge executables in the virtualenv
         easy_install deluge)
 }
@@ -34,8 +34,8 @@ case "${APKG_PKG_STATUS}" in
         setup_virtualenv
 
         # Restore previous Deluge configuration if it exists
-        if [[ -d ${APKG_TEMP_DIR}/config ]]; then
-            if [[ ! -d ${DELUGED_CONF} ]]; then
+        if [ -d ${APKG_TEMP_DIR}/config ]; then
+            if [ ! -d ${DELUGED_CONF} ]; then
                 mkdir ${DELUGED_CONF}
             fi
             cp -af ${APKG_TEMP_DIR}/config/* ${DELUGED_CONF}/
