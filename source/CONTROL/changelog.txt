@@ -1,3 +1,8 @@
+1.3.12-r0:
+- Update: Deluge 1.3.12 (git-542e028977b8bc965d068e5705bac17ff27928c4)
+- Fix: deluge logging
+- Fix: deluge did not start during boot
+
 1.3.11-r1:
 - Update: libtorrent-rasterbar 1.0.6
 - Fix: works with python 2.7.10
