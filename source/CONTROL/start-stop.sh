@@ -60,7 +60,7 @@ daemon_status() {
 	start-stop-daemon -K --quiet --test  --user "${USER}" --pidfile "${DELUGE_WEB_PID}"
 	ret2=$?
 
-	if [ "$ret1" -eq 0 ] || [ "$ret2" -eq 0 ]; then
+	if [ $ret1 -eq 0 ] || [ $ret2 -eq 0 ]; then
 		return 0
 	fi
 
@@ -68,13 +68,13 @@ daemon_status() {
 }
 
 wait_for_status() {
-	counter=$2
-	while [ "${counter}" -gt "$1" ]; do
+	counter=$1
+	while [ $counter -lt $2 ]; do
 		daemon_status
 		if [ $? -eq 1 ]; then
 			return 0
 		fi
-		counter=$(( counter - 1 ))
+		counter=$(( counter + 1 ))
 		sleep 1
 	done
 	return 1
