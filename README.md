@@ -2,16 +2,7 @@
 
 ![Deluge](https://raw.githubusercontent.com/mafredri/deluge-apkg/master/source/CONTROL/icon.png)
 
-Generate Deluge app for ASUSTOR ADM. This assumes Gentoo as the cross-compilation distro.
-
-## Main software and versions included
-
-* Deluge 1.3.11
-* libtorrent (rasterbar) 1.0.6
-
-## Requirements to build this apkg
-
-* Gentoo set up to cross-compile with binary packages for ADM
+This is the official version of Deluge available for ASUSTOR ADM. It's also available in App Central, however, the GitHub release is usually ahead of the App Central version.
 
 ## Links
 
