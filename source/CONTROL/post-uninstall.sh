@@ -9,4 +9,6 @@ fi
 # Source env variables
 . ${PKG_DIR}/CONTROL/env.sh
 
+rm -rf ${DELUGED_CONF}
+
 exit 0
