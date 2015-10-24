@@ -5,6 +5,7 @@ dev-python/setproctitle*
 dev-libs/boost*
 net-libs/rb_libtorrent-*
 dev-python/chardet*
+dev-python/enum34*
 dev-python/zope-interface*
 dev-python/pycparser*
 dev-python/markupsafe*
