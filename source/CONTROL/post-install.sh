@@ -11,6 +11,9 @@ fi
 
 setup_virtualenv() {
 	(cd ${PKG_DIR};
+		# Remove placeholders
+		rm bin/deluged bin/deluge-web
+
 		mv lib/python2.7/lib-dynload ./
 		mv lib/python2.7/site-packages ./
 		virtualenv .
