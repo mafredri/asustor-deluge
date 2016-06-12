@@ -59,13 +59,10 @@ build_arch() {
 	fi
 
 	log "Copying $arch files to $build_apk/$arch..."
-	rsync -a $build_files$prefix/ $build_apk/$arch/
+	rsync -a $build_files$prefix/usr/ $build_apk/$arch/
 
 	log "Remove .DS_Store"
 	find $build_apk/$arch -name .DS_Store -exec rm {} \;
-
-	log "Removing usr from path"
-	(cd $build_apk/$arch && mv usr/* ./ && rmdir usr)
 
 	config2json $arch > $build_apk/$arch/CONTROL/config.json
 	cp CHANGELOG.md $build_apk/$arch/CONTROL/changelog.txt
