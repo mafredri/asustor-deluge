@@ -26,6 +26,11 @@ if [ ! -d "${GEOIPDIR}" ]; then
     mkdir "${GEOIPDIR}"
 fi
 
+if [[ -z "$(find source/GeoIP/GeoIP.dat -mmin +1440)" ]]; then
+	echo "GeoIP databse is less than a day old, exiting"
+	exit 0
+fi
+
 cd $GEOIPDIR
 if [ -n "${DATABASES}" ]; then
     TMPDIR=$(mktemp -d geoipupdate.XXXXXXXXXX)

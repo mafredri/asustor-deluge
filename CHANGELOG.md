@@ -1,3 +1,9 @@
+1.3.12-r3:
+- Update: Deluge 1.3.12 (git-15a40232083ee25feff617c64c9ceec7e6043eaa)
+- Update libraries
+- Add SSL support for the Python virtualenv
+- Switch from LD_LIBRARY_PATH to using runpath instead
+
 1.3.12-r2:
 - Add ARM support!
 - Update: Deluge 1.3.12 (git-86b1b75fb8f4bfe565f66e6112bbe5d54cdc8b23)

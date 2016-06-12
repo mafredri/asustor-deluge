@@ -1,0 +1,78 @@
+---
+ssh: ascross
+
+package: deluge
+name: Deluge
+version: 1.3.12-r2.2
+architecture: ""
+firmware: 2.6.0
+
+config:
+  general:
+    package: "PACKAGE"
+    name: "NAME"
+    version: "VERSION"
+    depends:
+      - python
+    conflicts: []
+    developer: "Deluge Team"
+    maintainer: "mafredri"
+    email: "mafredri+adm@gmail.com"
+    website: "http://deluge-torrent.org"
+    architecture: "ARCHITECTURE"
+    firmware: "FIRMWARE"
+  adm-desktop:
+    app:
+      port: 8112
+      protocol: "http"
+      type: "custom"
+      url: "/"
+    privilege:
+      accessible: "users"
+      customizable: true
+  register:
+    symbolic-link:
+      /bin:
+        - "deluged"
+        - "deluge-web"
+    boot-priority:
+      start-order: 60
+      stop-order: 40
+    port:
+      - 8112
+      - 58846
+
+files:
+  - /usr/bin/unrar
+  - /usr/bin/p7zip
+  - /usr/lib/libboost_system.so*
+  - /usr/lib/libboost_python-2.7.so*
+  - /usr/lib/libtorrent-rasterbar.so*
+  - /usr/lib/libGeoIP.so*
+  - /usr/lib/libunrar.so*
+  - /usr/lib/p7zip
+  - /usr/lib/python2.7/lib-dynload/_ssl.so*
+site_packages:
+  - dev-python/attrs
+  - dev-python/cffi
+  - dev-python/chardet
+  - dev-python/cryptography
+  - dev-python/enum34
+  - dev-python/idna
+  - dev-python/ipaddress
+  - dev-python/mako
+  - dev-python/markupsafe
+  - dev-python/ply
+  - dev-python/pyasn1
+  - dev-python/pyasn1-modules
+  - dev-python/pycparser
+  - dev-python/pyopenssl
+  - dev-python/pyxdg
+  - dev-python/service_identity
+  - dev-python/setproctitle
+  - dev-python/six
+  - dev-python/twisted-core
+  - dev-python/twisted-web
+  - dev-python/zope-interface
+  - net-libs/rb_libtorrent # installs libtorrent.so in site-packages
+  - net-p2p/deluge

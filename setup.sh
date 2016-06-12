@@ -1,146 +1,87 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
-sudo echo -n
+emulate -L zsh
 
-BUMP_VERSION=0
-FETCH_PACKAGES=0
-GEOIP_OPTS=""
+script_dir=${${(%):-%x}:A:h}
+setup_yaml=$script_dir/setup.yml
 
-show_help() {
-	echo "Options:
-  -f    Fetch packages instead of using local ones
-  -g    Force GeoIP database update
-  -b    Bump version
-  -h    This help"
-	exit 0
+source ./scripts/setup/general-setup.sh
+source ./scripts/setup/parse-setup-yaml.sh
+source ./scripts/setup/python-site-packages.sh
+
+cd -q $script_dir
+
+# Update GeoIP databse
+./scripts/geoipupdate.sh --force
+
+ssh_host=$setup_ssh
+build_apk='build/apk'
+build_files='build/files'
+
+mkdir -p $build_files
+mkdir -p dist
+
+build_arch() {
+	local arch=$1
+	local prefix=$2
+	log() {
+		printf "%8s: $@\n" $arch
+	}
+
+	log "Building $setup_name $setup_version for $arch"
+
+	# Cleanup build directory
+	[[ -d $build_apk/$arch ]] && rm -rf $build_apk/$arch
+	mkdir -p $build_apk/$arch
+
+	log "Copying APK skeleton"
+	rsync -a source/ $build_apk/$arch
+
+	site_package_files=( $(get_site_packages $ssh_host $prefix "$setup_site_packages") )
+	files=(
+		$prefix$^setup_files
+		$prefix$^site_package_files
+	)
+
+	write_pkgversions $ssh_host $prefix "$files" pkgversions/$arch.txt &
+
+	log "Updating runpath on remote..."
+	patched_files=$(update_runpath $ssh_host $prefix /usr/local/AppCentral/$setup_package/lib "$files")
+	log "Patched runpath for: $patched_files"
+
+	log "Rsyncing files..."
+	rsync -q -a --relative --delete --exclude '*.py[cdo]' \
+		$ssh_host:"$files" $build_files/
+
+	if (( $? )); then
+		log "Failed fetching files for $arch"
+		continue
+	fi
+
+	log "Copying $arch files to $build_apk/$arch..."
+	rsync -a $build_files$prefix/ $build_apk/$arch/
+
+	log "Remove .DS_Store"
+	find $build_apk/$arch -name .DS_Store -exec rm {} \;
+
+	log "Removing usr from path"
+	(cd $build_apk/$arch && mv usr/* ./ && rmdir usr)
+
+	config2json $arch > $build_apk/$arch/CONTROL/config.json
+	cp CHANGELOG.md $build_apk/$arch/CONTROL/changelog.txt
+
+	log "Building APK..."
+	build_apk $build_apk/$arch dist
+
+	log "Done!"
+
+	wait
 }
 
-while getopts :fgbh opts; do
-   case $opts in
-		f)
-			FETCH_PACKAGES=1
-			;;
-		g)
-			GEOIP_OPTS="--force"
-			;;
-		b)
-			BUMP_VERSION=1
-			;;
-		h)
-			show_help
-			;;
-   esac
+for arch prefix in ${(kv)adm_arch}; do
+	build_arch $arch $prefix &
 done
 
-VERSION=$(<version.txt)
-if [ "$BUMP_VERSION" -eq 1 ]; then
-	echo "Bumping version..."
-	version_begin=${VERSION%.*}
-	version_part=${VERSION##*.}
-	if [ "$version_part" = "$VERSION" ]; then
-		version_part=0
-	else
-		version_part=$((version_part + 1))
-	fi
-	VERSION="${version_begin}.${version_part}"
-	echo "$VERSION" > version.txt
-	echo "New version $VERSION"
-fi
+wait
 
-ROOT=$(cd "$(dirname "${0}")" && pwd)
-PACKAGE=$(basename "${ROOT}")
-
-# This defines the arches available and from where to fetch the files
-# ARCH:PREFIX
-ADM_ARCH=(
-	"x86-64:/cross/x86_64-asustor-linux-gnu"
-	"i386:/cross/i686-asustor-linux-gnu"
-	"arm:/cross/arm-marvell-linux-gnueabi"
-)
-
-# Set hostname (ssh) from where to fetch the files
-HOST=asustorx
-
-cd $ROOT
-
-if [[ ! -d dist ]]; then
-	mkdir dist
-fi
-
-# Fetch GeoIP database
-scripts/geoipupdate.sh $GEOIP_OPTS
-
-for arch in ${ADM_ARCH[@]}; do
-	cross=${arch#*:}
-	arch=${arch%:*}
-
-	echo "Building ${arch} from ${HOST}:${cross}"
-
-	# Create temp directory and copy the APKG template
-	PKG_DIR=build/packages/$arch
-	if [ ! -d $PKG_DIR ]; then
-		mkdir -p $PKG_DIR
-	fi
-	if [ $FETCH_PACKAGES -eq 1 ]; then
-		echo "Rsyncing packages..."
-		rsync -ram --delete --include-from=packages.txt --exclude="*/*" --exclude="Packages" $HOST:$cross/packages/* $PKG_DIR
-		PKG_INSTALLED=$(cd $PKG_DIR; ls -1 */*.tbz2 | sort)
-		echo -e "# This file is auto-generated.\n${PKG_INSTALLED//.tbz2/}" > pkgversions_$arch.txt
-	else
-		echo "Using cached packages..."
-	fi
-
-	WORK_DIR=build/$arch
-	if [ ! -d $WORK_DIR ]; then
-		mkdir -p $WORK_DIR
-	fi
-	echo "Cleaning out ${WORK_DIR}..."
-	rm -rf $WORK_DIR
-	mkdir $WORK_DIR
-	chmod 0755 $WORK_DIR
-
-	echo "Copying apkg skeleton..."
-	cp -af source/* $WORK_DIR
-
-	echo "Unpacking files..."
-	TMP_DIR=$(mktemp -d /tmp/$PACKAGE.XXXXXX)
-	(cd $TMP_DIR; for pkg in $ROOT/$PKG_DIR/*/*.tbz2; do tar xjf $pkg; done)
-
-	echo "Grabbing required files..."
-	mv $TMP_DIR/usr/bin/unrar $WORK_DIR/bin
-	mv $TMP_DIR/usr/lib*/p7zip/* $WORK_DIR/bin
-	mv $TMP_DIR/usr/bin/p7zip $WORK_DIR/bin
-	mv $TMP_DIR/usr/lib*/libboost_system* $WORK_DIR/lib
-	mv $TMP_DIR/usr/lib*/libboost_python-2.7* $WORK_DIR/lib
-	mv $TMP_DIR/usr/lib*/libtorrent-rasterbar* $WORK_DIR/lib
-	mv $TMP_DIR/usr/lib*/libGeoIP* $WORK_DIR/lib
-	mv $TMP_DIR/usr/lib*/libunrar* $WORK_DIR/lib
-	# mv $TMP_DIR/usr/lib*/p7zip $WORK_DIR/lib
-	mv $TMP_DIR/usr/lib*/python2.7/site-packages/* $WORK_DIR/lib/python2.7/site-packages
-	# Temporary until ASUSTOR includes these in the Python app
-	# mv $TMP_DIR/usr/lib*/libpython2.7.so* $WORK_DIR/lib
-	# if [[ $arch == arm ]]; then
-	# 	# libff/cffi cross compilation doesn't work properly...
-	# 	cp -af $ROOT/misc/arm-fix/_cffi_backend.so $WORK_DIR/lib/python2.7/site-packages
-	# 	ln -sf /lib/ld-linux.so.3 $WORK_DIR/lib/ld-linux-armhf.so.3
-	# fi
-
-	rm -rf $TMP_DIR
-
-	echo "Finalizing..."
-	echo "Setting version to ${VERSION}"
-	sed -i '' -e "s^ADM_ARCH^${arch}^" -e "s^APKG_VERSION^${VERSION}^" $WORK_DIR/CONTROL/config.json
-
-	# Make sure the target directory exists
-	[[ ! -d dist/$arch ]] && mkdir dist/$arch
-	echo "Building APK..."
-	# APKs require root privileges, make sure priviliges are correct
-	sudo chown -R 0:0 $WORK_DIR
-	sudo scripts/apkg-tools.py create $WORK_DIR --destination dist/$arch/
-	sudo chown -R $(whoami) dist
-
-	# Reset permissions on working directory
-	sudo chown -R $(whoami) $WORK_DIR
-
-	echo "Done!"
-done
+print "\nThank you, come again!"

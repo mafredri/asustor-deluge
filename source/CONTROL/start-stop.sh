@@ -11,10 +11,6 @@ fi
 
 . "${PKG_DIR}/CONTROL/env.sh"
 
-export PATH=${PKG_DIR}/bin:$PATH
-export LD_LIBRARY_PATH=${PKG_DIR}/lib:${LD_LIBRARY_PATH}
-export HOME=${DELUGED_USER_HOME}
-
 DELUGED_LOGLEVEL=info
 DELUGE_WEB_LOGLEVEL=info
 
