@@ -2,24 +2,32 @@
 
 emulate -L zsh
 
-script_dir=${${(%):-%x}:A:h}
-setup_yaml=$script_dir/setup.yml
+0=${(%):-%N}
+
+# Change working directory
+cd -q ${0:A:h}
+
+setup_yaml=./setup.yml
 
 source ./scripts/setup/general-setup.sh
 source ./scripts/setup/parse-setup-yaml.sh
 source ./scripts/setup/python-site-packages.sh
 
-cd -q $script_dir
-
 # Update GeoIP databse
 ./scripts/geoipupdate.sh --force
 
 ssh_host=$setup_ssh
-build_apk='build/apk'
-build_files='build/files'
 
+dist_dir=dist
+build_dir=build
+build_apk=$build_dir/apk
+build_files=$build_dir/files
+
+mkdir -p $dist_dir
 mkdir -p $build_files
-mkdir -p dist
+
+# Clean up any .DS_Store files
+find $build_dir -name .DS_Store -exec rm {} \;
 
 build_arch() {
 	local arch=$1
@@ -61,14 +69,11 @@ build_arch() {
 	log "Copying $arch files to $build_apk/$arch..."
 	rsync -a $build_files$prefix/usr/ $build_apk/$arch/
 
-	log "Remove .DS_Store"
-	find $build_apk/$arch -name .DS_Store -exec rm {} \;
-
 	config2json $arch > $build_apk/$arch/CONTROL/config.json
 	cp CHANGELOG.md $build_apk/$arch/CONTROL/changelog.txt
 
 	log "Building APK..."
-	build_apk $build_apk/$arch dist
+	build_apk $build_apk/$arch $dist_dir
 
 	log "Done!"
 

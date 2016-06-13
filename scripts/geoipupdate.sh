@@ -27,7 +27,7 @@ if [ ! -d "${GEOIPDIR}" ]; then
 fi
 
 if [[ -z "$(find source/GeoIP/GeoIP.dat -mmin +1440)" ]]; then
-	echo "GeoIP databse is less than a day old, exiting"
+	echo "GeoIP databse is less than a day old, skipping..."
 	exit 0
 fi
 
