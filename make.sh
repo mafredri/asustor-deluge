@@ -7,16 +7,14 @@ emulate -L zsh
 # Change working directory
 cd -q ${0:A:h}
 
-setup_yaml=./setup.yml
-
 source ./scripts/setup/general-setup.sh
-source ./scripts/setup/parse-setup-yaml.sh
+source ./scripts/setup/parse-setup-yaml.sh ./config.yml config_
 source ./scripts/setup/python-site-packages.sh
 
 # Update GeoIP databse
 ./scripts/geoipupdate.sh --force
 
-ssh_host=$setup_ssh
+ssh_host=$config_ssh
 
 dist_dir=dist
 build_dir=build
@@ -36,7 +34,7 @@ build_arch() {
 		printf "%8s: $@\n" $arch
 	}
 
-	log "Building $setup_name $setup_version for $arch"
+	log "Building $config_name $config_version for $arch"
 
 	# Cleanup build directory
 	[[ -d $build_apk/$arch ]] && rm -rf $build_apk/$arch
@@ -45,16 +43,16 @@ build_arch() {
 	log "Copying APK skeleton"
 	rsync -a source/ $build_apk/$arch
 
-	site_package_files=( $(get_site_packages $ssh_host $prefix "$setup_site_packages") )
+	site_package_files=( $(get_site_packages $ssh_host $prefix "$config_site_packages") )
 	files=(
-		$prefix$^setup_files
+		$prefix$^config_files
 		$prefix$^site_package_files
 	)
 
 	write_pkgversions $ssh_host $prefix "$files" pkgversions/$arch.txt &
 
 	log "Updating runpath on remote..."
-	patched_files=$(update_runpath $ssh_host $prefix /usr/local/AppCentral/$setup_package/lib "$files")
+	patched_files=$(update_runpath $ssh_host $prefix /usr/local/AppCentral/$config_package/lib "$files")
 	log "Patched runpath for: $patched_files"
 
 	log "Rsyncing files..."

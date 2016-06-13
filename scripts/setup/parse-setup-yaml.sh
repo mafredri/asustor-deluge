@@ -2,7 +2,10 @@
 
 emulate -L zsh
 
-yaml() { shyaml $1 $2 <$setup_yaml }
+conf_yaml=$1
+conf_prefix=$2
+
+yaml() { shyaml $1 $2 <$conf_yaml }
 
 if (( ! ${+commands[shyaml]} )); then
 	print "shyaml required:"
@@ -20,25 +23,26 @@ fi
 for key in $(yaml keys); do
 	case $(yaml get-type $key) in
 		sequence)
-			typeset -g -a "setup_$key"
-			eval "setup_$key=( \$(yaml get-values \$key) )"
+			typeset -g -a "$conf_prefix$key"
+			eval "$conf_prefix$key=( \$(yaml get-values \$key) )"
 			;;
 		*)
-			typeset -g "setup_$key"
-			typeset "setup_$key"="$(yaml get-value $key)"
+			typeset -g "$conf_prefix$key"
+			typeset "$conf_prefix$key"="$(yaml get-value $key)"
 			;;
 	esac
 done
 
 config2json() {
 	local arch=$1
-	setup_architecture=$arch
+	typeset ${conf_prefix}architecture=$arch
 
 	# Update dynamic variables in configuration file
 	dynamic_conf_vars=( package name version architecture firmware )
-	config=$setup_config
+	config=${conf_prefix}config
+	config=${(P)config}
 	for key in $dynamic_conf_vars; do
-		real_key="setup_$key"
+		real_key="$conf_prefix$key"
 		config=${config/${(U)key}/${(P)real_key}}
 	done
 
