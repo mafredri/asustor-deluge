@@ -9,10 +9,10 @@ firmware: 2.6.0
 
 config:
   general:
-    developer: "Deluge Team"
-    website: "http://deluge-torrent.org"
-    maintainer: "mafredri"
-    email: "mafredri+adm@gmail.com"
+    developer: Deluge Team
+    website: http://deluge-torrent.org
+    maintainer: mafredri
+    email: mafredri+adm@gmail.com
     depends:
       - python
     conflicts: []
