@@ -9,39 +9,43 @@ firmware: 2.6.0
 
 config:
   general:
-    package: "PACKAGE"
-    name: "NAME"
-    version: "VERSION"
+    developer: "Deluge Team"
+    website: "http://deluge-torrent.org"
+    maintainer: "mafredri"
+    email: "mafredri+adm@gmail.com"
     depends:
       - python
     conflicts: []
-    developer: "Deluge Team"
-    maintainer: "mafredri"
-    email: "mafredri+adm@gmail.com"
-    website: "http://deluge-torrent.org"
+    package: "PACKAGE"
+    name: "NAME"
+    version: "VERSION"
     architecture: "ARCHITECTURE"
     firmware: "FIRMWARE"
   adm-desktop:
     app:
       port: 8112
-      protocol: "http"
-      type: "custom"
-      url: "/"
+      protocol: http
+      type: custom
+      url: /
     privilege:
-      accessible: "users"
+      accessible: users
       customizable: true
   register:
     symbolic-link:
       /bin:
         - "deluged"
+        - "deluge-console"
         - "deluge-web"
     boot-priority:
       start-order: 60
-      stop-order: 40
+      stop-order: 60
     port:
       - 8112
       - 58846
 
+case_sensitive: false
+runpath: /usr/local/AppCentral/deluge/lib
+root: /usr
 files:
   - /usr/bin/unrar
   - /usr/bin/p7zip

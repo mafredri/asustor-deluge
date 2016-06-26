@@ -1,5 +1,5 @@
 app-arch/p7zip-15.14.1
-app-arch/unrar-5.4.1
+app-arch/unrar-5.4.2
 dev-lang/python-2.7.11-r2
 dev-libs/boost-1.61.0
 dev-libs/geoip-1.6.9

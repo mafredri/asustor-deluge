@@ -2,6 +2,7 @@
 - Update: Deluge 1.3.12 (git-34e12fcb38bb9e555116a89a2f6813dd402aaa08)
 - Update libraries
 - Add SSL support for the Python virtualenv
+- Link deluge-web, deluge-console and deluged in /usr/local/bin
 - Switch from LD_LIBRARY_PATH to using runpath instead
 
 1.3.12-r2:
