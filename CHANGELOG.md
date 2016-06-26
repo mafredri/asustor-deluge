@@ -1,5 +1,6 @@
 1.3.12-r3:
-- Update: Deluge 1.3.12 (git-34e12fcb38bb9e555116a89a2f6813dd402aaa08)
+- Update Deluge to 1.3.12 (git-34e12fcb38bb9e555116a89a2f6813dd402aaa08)
+- Update libtorrent rasterbar to 1.0.9
 - Update libraries
 - Add SSL support for the Python virtualenv
 - Link deluge-web, deluge-console and deluged in /usr/local/bin
