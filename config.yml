@@ -3,7 +3,7 @@ ssh: ascross
 
 package: deluge
 name: Deluge
-version: 1.3.12-r3
+version: 1.3.13
 architecture: ""
 firmware: 2.6.0
 

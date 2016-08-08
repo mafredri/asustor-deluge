@@ -1,3 +1,6 @@
+1.3.13:
+- Update Deluge to 1.3.13 official!
+
 1.3.12-r3:
 - Update Deluge to 1.3.12 (git-34e12fcb38bb9e555116a89a2f6813dd402aaa08)
 - Update libtorrent rasterbar to 1.0.9
