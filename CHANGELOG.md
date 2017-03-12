@@ -1,3 +1,9 @@
+1.3.14:
+- Update Deluge to 1.3.14
+  - Security fix for WebUI
+- Update libtorrent rasterbar to 1.0.11
+- Update libs
+
 1.3.13:
 - Update Deluge to 1.3.13 official!
 
