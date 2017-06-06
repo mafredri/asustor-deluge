@@ -35,7 +35,8 @@ setup_virtualenv() {
 
 		. bin/activate
 		# Install deluge executables in the virtualenv
-		easy_install deluge)
+		easy_install deluge
+	)
 }
 
 case "${APKG_PKG_STATUS}" in
