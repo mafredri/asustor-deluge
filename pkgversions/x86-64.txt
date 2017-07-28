@@ -1,5 +1,5 @@
 app-arch/p7zip-16.02-r1
-app-arch/unrar-5.4.5
+app-arch/unrar-5.5.5-r1
 dev-lang/python-2.7.13
 dev-libs/boost-1.63.0
 dev-libs/geoip-1.6.11
@@ -25,10 +25,10 @@ dev-python/pyparsing-2.2.0
 dev-python/pyxdg-0.25-r1
 dev-python/service_identity-16.0.0
 dev-python/setproctitle-1.1.10
-dev-python/setuptools-35.0.2
+dev-python/setuptools-36.0.1
 dev-python/six-1.10.0
 dev-python/twisted-core-15.2.1
 dev-python/twisted-web-15.2.1
-dev-python/zope-interface-4.4.0-r1
+dev-python/zope-interface-4.4.1
 net-libs/libtorrent-rasterbar-1.0.11
 net-p2p/deluge-1.3.15
