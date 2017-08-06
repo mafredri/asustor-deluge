@@ -1,3 +1,7 @@
+1.3.15-r1:
+- Fix for ADM 3.0
+- Update dependencies
+
 1.3.15:
 - Update Deluge to 1.3.15
 	- Security fix for WebUI: prevents directory traversal that has the potential to compromise your machine
