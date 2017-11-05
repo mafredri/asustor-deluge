@@ -1,3 +1,6 @@
+1.3.15-r2:
+- Update dependencies
+
 1.3.15-r1:
 - Fix for ADM 3.0
 - Update dependencies
