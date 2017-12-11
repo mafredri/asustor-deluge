@@ -1,3 +1,8 @@
+1.3.15-r3:
+- Update to libtorrent-rasterbar 1.1.5
+- Update dependencies
+- Increase timeout when stopping service
+
 1.3.15-r2:
 - Update dependencies
 
