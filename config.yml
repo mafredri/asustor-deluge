@@ -45,14 +45,16 @@ config:
 
 case_sensitive: false
 runpath: /usr/local/AppCentral/deluge/lib
+updated_libstdcpp: true
 root: /usr
 files:
   - /usr/bin/unrar
   - /usr/bin/p7zip
   - /usr/lib/libboost_system.so*
   - /usr/lib/libboost_python-2.7.so*
+  - /usr/lib/libboost_chrono.so*
+  - /usr/lib/libboost_random.so*
   - /usr/lib/libtorrent-rasterbar.so*
-  - /usr/lib/libGeoIP.so*
   - /usr/lib/libunrar.so*
   - /usr/lib/p7zip
   - /usr/lib/python2.7/lib-dynload/_ssl.so*
