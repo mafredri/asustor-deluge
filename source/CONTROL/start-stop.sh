@@ -41,7 +41,7 @@ stop_daemon() {
 	start-stop-daemon -K --quiet --user "${USER}" --pidfile "${DELUGED_PID}"
 	start-stop-daemon -K --quiet --user "${USER}" --pidfile "${DELUGE_WEB_PID}"
 
-	wait_for_status 1 20
+	wait_for_status 1 30
 
 	if [ $? -eq 1 ]; then
 		echo "Taking too long, killing service..."
